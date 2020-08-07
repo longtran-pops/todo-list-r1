@@ -1,49 +1,65 @@
-import Icon from '@material-ui/core/Icon'
-import Button from '@material-ui/core/Button'
-const icons = {
-  'todo': 'assignment',
-  'in-progress': 'autorenew',
-  'done': 'assignment_turned_in',
-  'deleted': 'delete',
-  'canceled': 'cancel'
-}
-const colors = {
-  'todo': 'grey',
-  'in-progress': 'blue',
-  'done': 'green',
-  'deleted': 'red',
-  'canceled': 'black'
-}
-export default ({ children, status }) => {
+import { memo } from 'react';
+import Button from '@material-ui/core/Button';
+import styled from 'styled-components';
+import { Box, Flex, Text } from 'rebass/styled-components';
+import { propsComparison } from 'utils/helper';
+
+export const Wrapper = styled(Flex)`
+  border-bottom: 1px solid #d4cfcf;
+  border-right: 1px solid #d4cfcf;
+  border-left: 8px solid ${({ blColor }) => blColor};
+  border-radius: 4px;
+  &:first-of-type {
+    border-top: 1px solid #d4cfcf;
+  }
+`;
+
+export const TaskState = styled(Box).attrs(() => ({
+  m: 2,
+  p: 1,
+  width: '90px',
+  fontWeight: 'bold',
+  fontSize: '14px',
+  lineHeight: '18px',
+  textAlign: 'center',
+  opacity: 0.6,
+}))`
+  border: 1px solid ${({ color }) => color};
+  border-radius: 4px;
+  font-style: italic;
+`;
+
+export const ActionButton = styled(Button).attrs(() => ({
+  variant: 'outlined',
+  size: 'small',
+}))``;
+
+export const Actions = styled(Flex)`
+  ${ActionButton} {
+    margin-left: 10px;
+  }
+`;
+
+export default memo(({ id, title, label, color, actions, onChangeStatus }) => {
   return (
-    <>
-      <li className="task-list__item">
-        <Icon style={{ color: colors[status], margin: 'auto 4px auto 0px' }}>{icons[status]}</Icon>
-        <p className="title">{children}</p>
-        <div className="btn-group">
-          <Button type="button" color="primary">Start</Button>
-          <Button type="button" color="secondary">Done</Button>
-          <Button type="button">Cancel</Button>
-          <Button type="button">Delete</Button>
-        </div>
-      </li>
-      <style jsx>{
-        `
-        .task-list__item {
-          padding: 4px 8px;
-          margin: 2px 0px;
-          display: flex;
-          background: #fff;
-        }
-        .title {
-          flex: 1;
-          margin: auto 0;
-        }
-        .btn-group {
-          display: flex;
-        }
-        `
-      }</style>
-    </>
-  )
-}
+    <Wrapper blColor={color} pl={3} pr={3} flexDirection="row" background="white" lineHeight="45px">
+      <TaskState color={color}>{label}</TaskState>
+      <Text color="#424242" fontWeight="bold" mr={1}>
+        {id}
+      </Text>
+      <Text flex={1} as="p" m="auto 0" color="#424242">
+        - {title}
+      </Text>
+      <Actions flexDirection="row" height="35px" mt={1}>
+        {actions.map(({ label: btnLabel, color: btnColor, status }) => (
+          <ActionButton
+            key={status}
+            color={btnColor}
+            onClick={() => onChangeStatus({ id, status })}>
+            {btnLabel}
+          </ActionButton>
+        ))}
+      </Actions>
+    </Wrapper>
+  );
+}, propsComparison);

@@ -1,40 +1,34 @@
-import { useState } from 'react'
-import Button from '@material-ui/core/Button'
+import { useState, memo } from 'react';
+import styled from 'styled-components';
+import { Flex } from 'rebass/styled-components';
 
-export default ({ onAdd }) => {
-  const [taskTitle, updateTaskTitle] = useState('')
-  const addTask = () => {
+const Input = styled.input`
+  appearance: none;
+  padding: 8px 4px;
+  display: block;
+  flex: 1;
+  border: 1px solid #dedede;
+  border-radius: 2px;
+`;
+
+export default memo(({ onAdd }) => {
+  const [taskTitle, updateTaskTitle] = useState('');
+  const addTask = (e) => {
+    e.preventDefault();
     if (onAdd && taskTitle) {
-      onAdd({
-        id: Date.now(),
-        title: taskTitle,
-        status: 'todo'
-      })
+      onAdd(taskTitle);
     }
-    updateTaskTitle('')
-  }
+    updateTaskTitle('');
+  };
+
   return (
-    <>
-      <form className="container" onSubmit={(e) => {
-        e.preventDefault()
-        addTask()
-      }} >
-        <input className="task-input" type="text" value={taskTitle} onChange={(e) => updateTaskTitle(e.currentTarget.value)} />
-      </form>
-      <style jsx>{`
-      .container {
-        display: flex;
-        margin: 16px 0px;
-      }
-      .task-input {
-        appearance: none;
-        padding: 8px 4px;
-        display: block;
-        flex: 1;
-        border: 1px solid #dedede;
-        border-radius: 2px;
-      }
-      `}</style>
-    </>
-  )
-}
+    <Flex onSubmit={addTask} as="form" mt={3} mb={3}>
+      <Input
+        type="text"
+        value={taskTitle}
+        onChange={(e) => updateTaskTitle(e.currentTarget.value)}
+        placeholder="Input your task"
+      />
+    </Flex>
+  );
+});
