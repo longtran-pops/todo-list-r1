@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "target": "esnext",
+    "paths": {
+      "components/*": ["./components/*"],
+      "containers/*": ["./containers/*"],
+      "reducers/*": ["./reducers/*"],
+      "utils/*": ["./utils/*"],
+      "public/*": ["./public/*"],
+    }
+  },
+  "exclude": ["node_modules"]
+}

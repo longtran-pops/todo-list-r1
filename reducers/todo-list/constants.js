@@ -1,0 +1,9 @@
+export const GET_TODO = '[Todo] Get Todo List';
+export const GET_TODO_SUCCESS = '[Todo] Get Todo List Success';
+export const GET_TODO_FAIL = '[Todo] Get Todo List Fail';
+export const ADD_TASK = '[Todo] Add Task';
+export const ADD_TASK_SUCCESS = '[Todo] Add Task Success';
+export const ADD_TASK_FAIL = '[Todo] Add Task Fail';
+export const UPDATE_TASK = '[Todo] Update Task';
+export const UPDATE_TASK_SUCCESS = '[Todo] Update Task Success';
+export const UPDATE_TASK_FAIL = '[Todo] Update Task Fail';

@@ -1,0 +1,8 @@
+{
+  "typescript.suggest.autoImports": false,
+  "typescript.suggest.enabled": false,
+  "typescript.suggestionActions.enabled": false,
+  "typescript.suggest.paths": false,
+  "typescript.suggest.includeAutomaticOptionalChainCompletions": false,
+  "typescript.suggest.completeJSDocs": false
+}
