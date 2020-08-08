@@ -4,6 +4,7 @@ export default ({ children }) => {
       <ul className="task-list">
         {children}
       </ul>
+
       <style jsx>{
         `.task-list {
           border: 0;
@@ -15,5 +16,5 @@ export default ({ children }) => {
         }`
       }</style>
     </>
-  )
+  );
 }

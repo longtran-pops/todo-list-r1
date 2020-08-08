@@ -1,26 +1,31 @@
-import { useState } from 'react'
-import Button from '@material-ui/core/Button'
+import { useState } from 'react';
+import Task from 'models/Task';
 
-export default ({ onAdd }) => {
-  const [taskTitle, updateTaskTitle] = useState('')
+interface TaskInputProps {
+  onAdd: Function;
+}
+
+export default (props: TaskInputProps) => {
+  const { onAdd } = props;
+  const [taskTitle, updateTaskTitle] = useState('');
+  
   const addTask = () => {
     if (onAdd && taskTitle) {
-      onAdd({
-        id: Date.now(),
-        title: taskTitle,
-        status: 'todo'
-      })
+      onAdd(new Task(taskTitle));
     }
-    updateTaskTitle('')
-  }
+    
+    updateTaskTitle('');
+  };
+
   return (
     <>
       <form className="container" onSubmit={(e) => {
-        e.preventDefault()
-        addTask()
+        e.preventDefault();
+        addTask();
       }} >
         <input className="task-input" type="text" value={taskTitle} onChange={(e) => updateTaskTitle(e.currentTarget.value)} />
       </form>
+
       <style jsx>{`
       .container {
         display: flex;
@@ -36,5 +41,5 @@ export default ({ onAdd }) => {
       }
       `}</style>
     </>
-  )
+  );
 }
