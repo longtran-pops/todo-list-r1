@@ -1,5 +1,6 @@
 import Icon from '@material-ui/core/Icon'
 import Button from '@material-ui/core/Button'
+import { useGlobalStore } from '../utils/storeapi'
 const icons = {
   'todo': 'assignment',
   'in-progress': 'autorenew',
@@ -14,17 +15,26 @@ const colors = {
   'deleted': 'red',
   'canceled': 'black'
 }
-export default ({ children, status }) => {
+const actionMap = {
+  'todo': ['start', 'delete'],
+  'in-progress': ['cancel', 'done'],
+  'done': ['delete'],
+  'canceled': ['delete'],
+  'deleted': [],
+}
+export default ({ id, children, status }) => {
+  const { setTaskStart, setTaskDone, setTaskCancel, setTaskDelete } = useGlobalStore();
+  const actions = actionMap[status];
   return (
     <>
       <li className="task-list__item">
         <Icon style={{ color: colors[status], margin: 'auto 4px auto 0px' }}>{icons[status]}</Icon>
         <p className="title">{children}</p>
         <div className="btn-group">
-          <Button type="button" color="primary">Start</Button>
-          <Button type="button" color="secondary">Done</Button>
-          <Button type="button">Cancel</Button>
-          <Button type="button">Delete</Button>
+          {actions.includes('start') ? <Button onClick={() => setTaskStart(id)} type="button" color="primary">Start</Button> : null}
+          {actions.includes('done') ? <Button onClick={() => setTaskDone(id)} type="button" color="secondary">Done</Button> : null}
+          {actions.includes('cancel') ? <Button onClick={() => setTaskCancel(id)} type="button">Cancel</Button> : null}
+          {actions.includes('delete') ? <Button onClick={() => setTaskDelete(id)} type="button">Delete</Button> : null}
         </div>
       </li>
       <style jsx>{

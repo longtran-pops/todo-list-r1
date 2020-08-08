@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import Button from '@material-ui/core/Button'
 
 export default ({ onAdd }) => {
   const [taskTitle, updateTaskTitle] = useState('')
@@ -19,7 +18,7 @@ export default ({ onAdd }) => {
         e.preventDefault()
         addTask()
       }} >
-        <input className="task-input" type="text" value={taskTitle} onChange={(e) => updateTaskTitle(e.currentTarget.value)} />
+        <input placeholder="Add some tasks..." className="task-input" type="text" value={taskTitle} onChange={(e) => updateTaskTitle(e.currentTarget.value)} />
       </form>
       <style jsx>{`
       .container {

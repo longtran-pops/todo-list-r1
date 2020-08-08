@@ -1,10 +1,13 @@
-import Head from 'next/head'
-import { useState } from 'react'
-import TaskList from 'components/TaskList'
-import TaskListItem from 'components/TaskListItem'
-import TaskInput from 'components/TaskInput'
+import Head from 'next/head';
+
+import TaskList from 'components/TaskList';
+import TaskListItem from 'components/TaskListItem';
+import TaskInput from 'components/TaskInput';
+import { useGlobalStore } from "./../utils/storeapi";
+
 export default function Home() {
-  const [tasks, setTasks] = useState([])
+  const { tasks, setTasks } = useGlobalStore();
+
   return (
     <div className='container'>
       <Head>
@@ -20,7 +23,7 @@ export default function Home() {
         <TaskList>
           {tasks.map((task) => {
             return (
-              <TaskListItem key={task.id} status={task.status}>
+              <TaskListItem key={task.id} id={task.id} status={task.status}>
                 {task.title}
               </TaskListItem>
             )
