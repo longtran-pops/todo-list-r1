@@ -1,15 +1,12 @@
 import Head from 'next/head';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import TaskList from 'components/TaskList';
 import TaskListItem from 'components/TaskListItem';
 import TaskInput from 'components/TaskInput';
 import Task from 'models/Task';
-import { addTask } from 'redux/actions/taskAction';
 
 export default function Home() {
-  const dispatch = useDispatch();
   const { tasks } = useSelector(state => state.tasks);
-  const onAdd = (task: Task) => dispatch(addTask(task));
 
   return (
     <div className='container'>
@@ -22,7 +19,7 @@ export default function Home() {
         />
       </Head>
       <main style={{ maxWidth: '966px', margin: 'auto' }}>
-        <TaskInput onAdd={(task: Task) => onAdd(task)} />
+        <TaskInput />
         <TaskList>
           {tasks.map((task: Task) => {
             return (

@@ -1,17 +1,15 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import Task from 'models/Task';
+import { addTask } from 'redux/actions/taskAction';
 
-interface TaskInputProps {
-  onAdd: Function;
-}
-
-export default (props: TaskInputProps) => {
-  const { onAdd } = props;
+export default () => {
   const [taskTitle, updateTaskTitle] = useState('');
+  const dispatch = useDispatch();
   
-  const addTask = () => {
-    if (onAdd && taskTitle) {
-      onAdd(new Task(taskTitle));
+  const addNewTask = () => {
+    if (taskTitle) {
+      dispatch(addTask(new Task(taskTitle)))
     }
     
     updateTaskTitle('');
@@ -21,7 +19,7 @@ export default (props: TaskInputProps) => {
     <>
       <form className="container" onSubmit={(e) => {
         e.preventDefault();
-        addTask();
+        addNewTask();
       }} >
         <input className="task-input" type="text" value={taskTitle} onChange={(e) => updateTaskTitle(e.currentTarget.value)} />
       </form>
