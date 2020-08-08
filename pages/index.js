@@ -1,10 +1,40 @@
 import Head from 'next/head'
-import { useState } from 'react'
+import {useEffect, useState} from 'react'
 import TaskList from 'components/TaskList'
 import TaskListItem from 'components/TaskListItem'
 import TaskInput from 'components/TaskInput'
+
+export const saveList = (list) => localStorage ? localStorage.setItem('task_list', JSON.stringify(list)) : null;
+
+export const getList = () => {
+  try {
+    const state = window.localStorage.getItem('task_list');
+    return state ? JSON.parse(state) : null;
+  } catch {}
+};
+
+
 export default function Home() {
-  const [tasks, setTasks] = useState([])
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    setTasks(getList());
+  }, []);
+
+
+  const onAddTask = (task) => {
+    setTasks([...tasks, task]);
+    saveList(tasks);
+  }
+  const updateTask = (changeItem) => (status) => {
+    tasks.forEach((item) => {
+      if (item.id === changeItem.id) {
+        item.status = status;
+      }
+    })
+    setTasks([...tasks]);
+    saveList(tasks);
+  };
   return (
     <div className='container'>
       <Head>
@@ -16,11 +46,12 @@ export default function Home() {
         />
       </Head>
       <main style={{ maxWidth: '966px', margin: 'auto' }}>
-        <TaskInput onAdd={(task) => setTasks([...tasks, task])} />
+        <TaskInput onAdd={(task) => onAddTask(task)} />
         <TaskList>
           {tasks.map((task) => {
             return (
-              <TaskListItem key={task.id} status={task.status}>
+              <TaskListItem key={task.id} status={task.status}
+                            onUpdateStatus={updateTask(task)}>
                 {task.title}
               </TaskListItem>
             )

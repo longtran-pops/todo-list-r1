@@ -1,4 +1,4 @@
-export default ({ children }) => {
+export const TaskList = ({ children }) => {
   return (
     <>
       <ul className="task-list">
@@ -17,3 +17,5 @@ export default ({ children }) => {
     </>
   )
 }
+
+export default TaskList;
