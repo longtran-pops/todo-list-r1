@@ -1,5 +1,5 @@
+/* eslint-disable import/no-cycle */
 import lscache from 'lscache';
-// eslint-disable-next-line import/no-cycle
 import {
   SET_TASKS,
   START_TASK,
@@ -8,13 +8,14 @@ import {
   DELETE_TASK,
   RESET,
 } from '~/utils/storeapi';
+import { defaultState } from '~/utils/store';
 
 const setState = (currentState) => {
   lscache.set('state', JSON.stringify(currentState));
   return currentState;
 };
 
-const reducer = (state, action) => {
+const reducer = (state = defaultState, action) => {
   switch (action.type) {
     case 'sync':
       return setState(action.newState);
@@ -77,7 +78,7 @@ const reducer = (state, action) => {
         tasks: [],
       });
     default:
-      throw new Error(`Unhandled action type: ${action.type}`);
+      return state;
   }
 };
 

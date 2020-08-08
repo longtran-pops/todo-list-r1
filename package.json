@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "eslint": "eslint .",
+    "test": "jest",
+    "test:watch": "npm test -- --watch",
     "analyze": "NODE_ENV=production BUNDLE_ANALYZE=both next build",
     "analyze:server": "NODE_ENV=production BUNDLE_ANALYZE=server next build",
     "analyze:browser": "NODE_ENV=production BUNDLE_ANALYZE=browser next build"
@@ -42,6 +44,7 @@
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-react": "^7.20.5",
     "husky": "^4.2.5",
+    "jest": "^26.2.2",
     "lint-staged": "^10.2.11",
     "prettier": "^2.0.5",
     "pretty-quick": "^2.0.1"

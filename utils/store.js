@@ -25,7 +25,7 @@ const ref = db.ref('/state');
 const StoreContext = createContext();
 
 let initialState = {};
-const defaultState = {
+export const defaultState = {
   appInit: false,
   tasks: [],
 };
