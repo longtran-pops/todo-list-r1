@@ -24,38 +24,45 @@ const ref = db.ref('/state');
 
 const StoreContext = createContext();
 
-let initialState = {};
-const defaultState = {
+export const defaultState = {
   appInit: false,
   tasks: [],
 };
 
 export const StoreProvider = ({ children }) => {
-  initialState = lscache.get('state') ? JSON.parse(lscache.get('state')) : defaultState;
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, defaultState);
 
   useEffect(() => {
     if (state.appInit) {
+      // Always sync localStorage and FireBae when state change
       ref.set(JSON.stringify(state), (error) => {
         if (error) {
           console.log(`Data could not be saved.${error}`);
-          lscache.set('state', JSON.stringify(state));
         } else {
           console.log('Data saved successfully.');
         }
       });
+      lscache.set('state', JSON.stringify(state));
     }
   }, [state]);
 
   useEffect(() => {
-    ref.on('value', (snapshot) => {
-      let val = snapshot.val();
-      if (val === null) {
-        defaultState.appInit = true;
-        val = JSON.stringify(defaultState);
-      }
-      dispatch({ type: 'sync', newState: JSON.parse(val) });
-    });
+    ref.on(
+      'value',
+      (snapshot) => {
+        let val = snapshot.val();
+        if (val === null) {
+          defaultState.appInit = true;
+          val = JSON.stringify(defaultState);
+        }
+        dispatch({ type: 'sync', newState: JSON.parse(val) });
+      },
+      (error) => {
+        // If FireBase error then use localStorage as dataStore
+        dispatch({ type: 'sync', newState: JSON.parse(lscache.get('state')) });
+        console.error(`Cannot get firebase data: ${error}`);
+      },
+    );
   }, []);
 
   return <StoreContext.Provider value={{ state, dispatch }}>{children}</StoreContext.Provider>;

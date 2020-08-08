@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Icon from '@material-ui/core/Icon';
 import Button from '@material-ui/core/Button';
-import { useGlobalStore } from '../utils/storeapi';
 
 const icons = {
   todo: 'assignment',
@@ -25,9 +24,9 @@ const actionMap = {
   deleted: [],
 };
 
-export default ({ id, children, status }) => {
-  const { setTaskStart, setTaskDone, setTaskCancel, setTaskDelete } = useGlobalStore();
+const TaskListItem = memo(({ id, handleAction, children, status }) => {
   const actions = actionMap[status];
+  console.log('re-render li');
   return (
     <>
       <li className="task-list__item">
@@ -35,22 +34,22 @@ export default ({ id, children, status }) => {
         <p className="title">{children}</p>
         <div className="btn-group">
           {actions.includes('start') ? (
-            <Button onClick={() => setTaskStart(id)} type="button" color="primary">
+            <Button onClick={() => handleAction(id, 'start')} type="button" color="primary">
               Start
             </Button>
           ) : null}
           {actions.includes('done') ? (
-            <Button onClick={() => setTaskDone(id)} type="button" color="secondary">
+            <Button onClick={() => handleAction(id, 'done')} type="button" color="secondary">
               Done
             </Button>
           ) : null}
           {actions.includes('cancel') ? (
-            <Button onClick={() => setTaskCancel(id)} type="button">
+            <Button onClick={() => handleAction(id, 'cancel')} type="button">
               Cancel
             </Button>
           ) : null}
           {actions.includes('delete') ? (
-            <Button onClick={() => setTaskDelete(id)} type="button">
+            <Button onClick={() => handleAction(id, 'delete')} type="button">
               Delete
             </Button>
           ) : null}
@@ -75,4 +74,6 @@ export default ({ id, children, status }) => {
       </style>
     </>
   );
-};
+});
+
+export default TaskListItem;

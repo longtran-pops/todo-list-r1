@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Head from 'next/head';
 
 import TaskList from '~/components/TaskList';
@@ -7,7 +7,35 @@ import TaskInput from '~/components/TaskInput';
 import { useGlobalStore } from '~/utils/storeapi';
 
 export default function Home() {
-  const { tasks, setTasks } = useGlobalStore();
+  const {
+    tasks,
+    setTasks,
+    setTaskStart,
+    setTaskDone,
+    setTaskCancel,
+    setTaskDelete,
+  } = useGlobalStore();
+
+  const theActions = (id, action) => {
+    // eslint-disable-next-line default-case
+    switch (action) {
+      case 'start':
+        setTaskStart(id);
+        break;
+      case 'done':
+        setTaskDone(id);
+        break;
+      case 'cancel':
+        setTaskCancel(id);
+        break;
+      case 'delete':
+        setTaskDelete(id);
+        break;
+    }
+  };
+
+  const memoizedCallback = useCallback(theActions, []);
+
   return (
     <div className="container">
       <Head>
@@ -22,7 +50,12 @@ export default function Home() {
         <TaskInput onAdd={(task) => setTasks([...tasks, task])} />
         <TaskList>
           {tasks.map((task) => (
-            <TaskListItem key={task.id} id={task.id} status={task.status}>
+            <TaskListItem
+              handleAction={memoizedCallback}
+              key={task.id}
+              id={task.id}
+              status={task.status}
+            >
               {task.title}
             </TaskListItem>
           ))}

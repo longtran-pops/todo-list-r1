@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { memo } from 'react';
 
-export default ({ children }) => (
+export default memo(({ children }) => (
   <>
     <ul className="task-list">{children}</ul>
     <style jsx>
@@ -16,4 +16,4 @@ export default ({ children }) => (
       `}
     </style>
   </>
-);
+));
