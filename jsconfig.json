@@ -1,5 +1,14 @@
 {
   "compilerOptions": {
-    "baseUrl": "."
-  }
+    "jsx": "react",
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "baseUrl": "./",
+    "paths": {
+      "~/*": ["./*"]
+    }
+  },
+  "include": ["./"],
+  "exclude": ["node_modules", "**/node_modules/*"]
 }

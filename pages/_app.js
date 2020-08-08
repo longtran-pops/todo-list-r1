@@ -1,5 +1,5 @@
-import React from "react";
-import { StoreProvider } from "../utils/store";
+import React from 'react';
+import { StoreProvider } from '~/utils/store';
 
 function App({ Component, pageProps }) {
   return (
