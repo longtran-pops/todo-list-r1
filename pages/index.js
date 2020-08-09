@@ -1,10 +1,37 @@
 import Head from 'next/head'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import TaskList from 'components/TaskList'
 import TaskListItem from 'components/TaskListItem'
 import TaskInput from 'components/TaskInput'
+import { persistTodos, readLocalTodos } from '../todo-helper'
+
 export default function Home() {
-  const [tasks, setTasks] = useState([])
+  const [tasks, setTasks] = useState([]);
+  useEffect(()=>{
+    setTasks(readLocalTodos())
+  },[])
+  const updateTask = useCallback((taskID,status)=>{
+    setTasks(prevState => {
+      const updatingItem =  prevState.find(item => item.id === taskID);
+      if(updatingItem) updatingItem.status = status;
+      // queue later in the event loop - prevent render process from blocking
+      setTimeout(() => {
+        persistTodos(prevState)
+      }, 100);
+      return [...prevState]
+    })
+    
+  },[])
+  const addTask = useCallback((task)=>{
+    setTasks(prevState => {
+      const nextState = [...prevState,task]
+      // queue later in the event loop - prevent render process from blocking
+      setTimeout(() => {
+        persistTodos(nextState)
+      }, 100);
+      return nextState
+    })
+  },[])
   return (
     <div className='container'>
       <Head>
@@ -16,11 +43,11 @@ export default function Home() {
         />
       </Head>
       <main style={{ maxWidth: '966px', margin: 'auto' }}>
-        <TaskInput onAdd={(task) => setTasks([...tasks, task])} />
+        <TaskInput onAdd={addTask} />
         <TaskList>
           {tasks.map((task) => {
             return (
-              <TaskListItem key={task.id} status={task.status}>
+              <TaskListItem key={task.id} id={task.id} onUpdate={updateTask} status={task.status}>
                 {task.title}
               </TaskListItem>
             )

@@ -1,7 +1,6 @@
-import { useState } from 'react'
-import Button from '@material-ui/core/Button'
+import { useState, memo } from 'react'
 
-export default ({ onAdd }) => {
+export default memo(function TaskInput({ onAdd }){
   const [taskTitle, updateTaskTitle] = useState('')
   const addTask = () => {
     if (onAdd && taskTitle) {
@@ -37,4 +36,4 @@ export default ({ onAdd }) => {
       `}</style>
     </>
   )
-}
+})

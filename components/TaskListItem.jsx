@@ -1,30 +1,37 @@
+import {memo} from 'react';
 import Icon from '@material-ui/core/Icon'
 import Button from '@material-ui/core/Button'
+import { STATUS } from '../todo-helper'
+
 const icons = {
-  'todo': 'assignment',
-  'in-progress': 'autorenew',
-  'done': 'assignment_turned_in',
-  'deleted': 'delete',
-  'canceled': 'cancel'
+  [STATUS.NEW]: 'assignment',
+  [STATUS.IN_PROGRESS]: 'autorenew',
+  [STATUS.DONE]: 'assignment_turned_in',
+  [STATUS.DELETED]: 'delete',
+  [STATUS.CANCELED]: 'cancel'
 }
 const colors = {
-  'todo': 'grey',
-  'in-progress': 'blue',
-  'done': 'green',
-  'deleted': 'red',
-  'canceled': 'black'
+  [STATUS.NEW]: 'grey',
+  [STATUS.IN_PROGRESS]: 'blue',
+  [STATUS.DONE]: 'green',
+  [STATUS.DELETED]: 'red',
+  [STATUS.CANCELED]: 'black'
 }
-export default ({ children, status }) => {
+export default memo(function TaskListItem({ children, id, status, onUpdate }){
+  const startBtnMarkup =  status === STATUS.NEW && <Button onClick={()=>{onUpdate(id,STATUS.IN_PROGRESS)}} type="button" color="primary">Start</Button>;
+  const doneBtnMarkup =  status === STATUS.IN_PROGRESS && <Button onClick={()=>{onUpdate(id,STATUS.DONE)}} type="button" color="secondary">Done</Button>
+  const cancelBtnMarkup =  status === STATUS.IN_PROGRESS && <Button onClick={()=>{onUpdate(id,STATUS.CANCELED)}} type="button">Cancel</Button>
+  const deleteBtnMarkup =  status !== STATUS.IN_PROGRESS && status !== STATUS.DELETED && <Button onClick={()=>{onUpdate(id,STATUS.DELETED)}} type="button">Delete</Button>
   return (
     <>
       <li className="task-list__item">
         <Icon style={{ color: colors[status], margin: 'auto 4px auto 0px' }}>{icons[status]}</Icon>
         <p className="title">{children}</p>
         <div className="btn-group">
-          <Button type="button" color="primary">Start</Button>
-          <Button type="button" color="secondary">Done</Button>
-          <Button type="button">Cancel</Button>
-          <Button type="button">Delete</Button>
+          {startBtnMarkup}
+          {doneBtnMarkup}
+          {cancelBtnMarkup}
+          {deleteBtnMarkup}
         </div>
       </li>
       <style jsx>{
@@ -46,4 +53,4 @@ export default ({ children, status }) => {
       }</style>
     </>
   )
-}
+})
